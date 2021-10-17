@@ -19,7 +19,6 @@ const iconBaseStyle = {
 };
 
 const buttonStyle = {
-  // height: 'calc(100% + 7rem)',
   height: '100%',
   width: '100%',
   position: 'absolute',
@@ -27,7 +26,7 @@ const buttonStyle = {
 };
 
 export default function ActionBox(props) {
-  const { enabled, onClick, Icon, children, iconColor } = props;
+  const { buttonEnabled, onClick, Icon, children, iconColor } = props;
   const iconStyle = useMemo(
     () => ({
       ...iconBaseStyle,
@@ -39,7 +38,7 @@ export default function ActionBox(props) {
   return (
     <Box sx={containerStyle}>
       {children}
-      {enabled && (
+      {buttonEnabled && (
         <Button variant="text" sx={buttonStyle} onClick={onClick}>
           <Icon sx={iconStyle} />
         </Button>

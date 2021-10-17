@@ -1,23 +1,34 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import UnCheckedIcon from '@mui/icons-material/CheckBoxOutlineBlankOutlined';
 import CheckedIcon from '@mui/icons-material/CheckBoxOutlined';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import PlayIcon from '@mui/icons-material/PlayArrowOutlined';
+import Button from '@mui/material/Button';
+import PlayIcon from '@mui/icons-material/PlayArrowSharp';
 import useSolutionSolver from './solution.hook';
 import ActionBox from '../../shared/ActionBox';
 import { red } from '@mui/material/colors';
 
-const cardStyle = {
+const cardHiddenStyle = {
   m: 2,
   height: '100%',
   boxShadow: 0,
   backgroundColor: 'transparent',
 };
 
-const cardContentStyle = {
+const cardShownStyle = {
+  m: 2,
+  height: '100%',
+  backgroundColor: '#FFFFFF',
+  backgroundImage: `
+    linear-gradient(60deg, transparent 50%, #6666FF 50%),
+    linear-gradient(120deg, transparent 50%, #6666FF 50%)`,
+  transition: 'padding 0.2s ease',
+};
+
+const cardContentStyleBase = {
   p: 0,
   display: 'flex',
   flexDirection: 'row',
@@ -35,7 +46,7 @@ const alignVertically = {
 };
 
 function Solution(props) {
-  const { wizard } = props;
+  const { wizard, smallStyle } = props;
   const { elements, statesCount } = wizard;
   const [elState, setElState] = useState(elements.map((el) => el.initialState));
   const [elChecked, setElChecked] = useState(elements.map((_) => false));
@@ -44,6 +55,19 @@ function Solution(props) {
   const { solve, calculateMove, calculateChecked } = useSolutionSolver(
     elements,
     statesCount
+  );
+
+  const cardContentStyle = useMemo(
+    () =>
+      smallStyle
+        ? { ...cardContentStyleBase, marginTop: '1.5rem' }
+        : cardContentStyleBase,
+    [smallStyle]
+  );
+
+  const cardStyle = useMemo(
+    () => (smallStyle ? cardShownStyle : cardHiddenStyle),
+    [smallStyle]
   );
 
   const play = useCallback(() => {
@@ -81,21 +105,26 @@ function Solution(props) {
 
       setElState((prev) => calculateMove(prev, moveId));
       setHits((prev) => prev.map((hit, i) => (moveId === i ? hit - 1 : hit)));
-    }, 1000);
+    }, 500);
   }, [elements, calculateMove, hits]);
 
   return (
     <ActionBox
-      onClick={() => play(step)}
+      onClick={() => play()}
       Icon={PlayIcon}
-      enabled={!hits && result[0] !== '-'}
+      smallStyle={smallStyle}
+      buttonEnabled={!smallStyle && !hits && result[0] !== '-'}
       iconColor={red[700]}
     >
       {result.map((elResult, id) => {
         const fontStyle = { fontWeight: 'bold' };
-        const checkIcon = elChecked[id] ? <CheckedIcon /> : <UnCheckedIcon />;
+        const checkIcon = elChecked[id] ? (
+          <CheckedIcon sx={{ fontSize: 32 }} />
+        ) : (
+          <UnCheckedIcon sx={{ fontSize: 32 }} />
+        );
         return (
-          <Card key={id} sx={cardStyle}>
+          <Card key={id} sx={cardStyle} raised={smallStyle}>
             <CardContent sx={cardContentStyle}>
               <Box sx={alignVertically}>
                 <Typography variant="h2" sx={fontStyle}>
@@ -113,6 +142,16 @@ function Solution(props) {
           </Card>
         );
       })}
+      {smallStyle && (
+        <Button
+          color="secondary"
+          variant="contained"
+          sx={{ m: 2 }}
+          onClick={() => play()}
+        >
+          <PlayIcon sx={{ fontSize: 32 }} />
+        </Button>
+      )}
     </ActionBox>
   );
 }

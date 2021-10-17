@@ -39,7 +39,7 @@ export default function WizardStep(props) {
     <ActionBox
       onClick={() => moveTo(step)}
       Icon={NavigateBeforeOutlinedIcon}
-      enabled={!active}
+      buttonEnabled={!active}
     >
       {stepComponent({ wizard, active })}
     </ActionBox>

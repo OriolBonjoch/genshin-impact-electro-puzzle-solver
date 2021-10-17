@@ -3,10 +3,8 @@ import ButtonGroup from '@mui/material/ButtonGroup';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import CardHeader from '@mui/material/CardHeader';
+import Typography from '@mui/material/Typography';
 import Slider from '@mui/material/Slider';
-import Avatar from '@mui/material/Avatar';
-import { red } from '@mui/material/colors';
 
 const cardStyle = {
   m: 2,
@@ -19,8 +17,8 @@ const disabledCardStyle = {
   paddingRight: '100%',
   backgroundColor: '#FFFFFF',
   backgroundImage: `
-    linear-gradient(60deg, transparent 75%, #6666FF 75%),
-    linear-gradient(120deg, transparent 75%, #6666FF 75%)`,
+    linear-gradient(70deg, transparent 72%, #6666FF 72%),
+    linear-gradient(110deg, transparent 72%, #6666FF 72%)`,
   transition: 'padding 0.2s ease',
 };
 
@@ -47,15 +45,8 @@ function ConfigureElements(props) {
               transition: 'margin 0.2s ease, padding 0.2s ease',
             }}
           >
-            <CardHeader
-              title={`Pieza #${id + 1}`}
-              avatar={
-                <Avatar sx={{ bgcolor: red[active ? 500 : 100] }}>
-                  {id + 1}
-                </Avatar>
-              }
-            ></CardHeader>
             <CardContent>
+              <Typography gutterBottom>Posición inicial</Typography>
               <Slider
                 defaultValue={defaults[i]}
                 disabled={!active}
@@ -63,10 +54,13 @@ function ConfigureElements(props) {
                 marks
                 min={0}
                 max={statesCount}
-                aria-label="Estado inicial"
+                aria-label="Posición inicial"
                 valueLabelDisplay="auto"
                 onChangeCommitted={(_, value) => setElementState(id, value)}
               />
+              <Typography sx={{ marginTop: 3 }} gutterBottom>
+                Piezas movidas
+              </Typography>
               <ButtonGroup size="large" color="primary">
                 {buttons.map((b) => {
                   const checked = moves.includes(b);
