@@ -128,7 +128,7 @@ function Solution(props) {
             <CardContent sx={cardContentStyle}>
               <Box sx={alignVertically}>
                 <Typography variant="h2" sx={fontStyle}>
-                  {elState[id]}
+                  {elState[id] + 1}
                 </Typography>
                 {checkIcon}
               </Box>

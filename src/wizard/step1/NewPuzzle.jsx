@@ -26,7 +26,7 @@ function NewPuzzle(props) {
         InputProps={{ inputProps: { min: 2, max: 5 } }}
         onChange={(event) => {
           const value = Number.parseInt(event.target.value);
-          if (Number.isInteger(value)) {
+          if (Number.isInteger(value) && parseInt(value) > 0) {
             setStatesCount(value);
           }
         }}

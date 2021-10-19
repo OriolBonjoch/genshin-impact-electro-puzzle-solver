@@ -52,11 +52,11 @@ function ConfigureElements(props) {
                 disabled={!active}
                 step={1}
                 marks
-                min={0}
+                min={1}
                 max={statesCount}
                 aria-label="Posición inicial"
                 valueLabelDisplay="auto"
-                onChangeCommitted={(_, value) => setElementState(id, value)}
+                onChangeCommitted={(_, value) => setElementState(id, value - 1)}
               />
               <Typography sx={{ marginTop: 3 }} gutterBottom>
                 Piezas movidas
