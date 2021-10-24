@@ -6,7 +6,8 @@ import NavigateNextOutlined from '@mui/icons-material/NavigateNextOutlined';
 import ActionBox from '../shared/ActionBox';
 
 const containerBox = {
-  minHeight: 'calc(100vh - 7rem)',
+  // marginBottom: '2rem',
+  // minHeight: 'calc(100vh - 7rem)',
   height: '100%',
   width: '100%',
   display: 'flex',
@@ -16,7 +17,7 @@ const containerBox = {
   pt: 3,
 };
 
-export default function WizardStep(props) {
+function WizardStepContent(props) {
   const { step, activeStep, stepComponent, moveTo, wizard, smallStyle } = props;
   const future = useMemo(() => activeStep < step, [activeStep, step]);
   const active = useMemo(() => activeStep === step, [activeStep, step]);
@@ -48,5 +49,16 @@ export default function WizardStep(props) {
     >
       {stepComponent({ wizard, active, smallStyle })}
     </ActionBox>
+  );
+}
+
+export default function WizardStep(props) {
+  const { key, smallStyle, stepsWidth } = props;
+  return smallStyle ? (
+    <WizardStepContent key={key} {...props} />
+  ) : (
+    <Box key={key} sx={{ flex: `1 1 ${stepsWidth}%` }}>
+      <WizardStepContent {...props} />
+    </Box>
   );
 }

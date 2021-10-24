@@ -1,1 +1,1 @@
-export * from './LargeWizard';
+export * from './Wizard';

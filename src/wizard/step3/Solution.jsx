@@ -57,6 +57,14 @@ function Solution(props) {
     statesCount
   );
 
+  // const cardContentStyle = useMemo(
+  //   () =>
+  //     smallStyle
+  //       ? { ...cardContentStyleBase, marginTop: '1.5rem' }
+  //       : cardContentStyleBase,
+  //   [smallStyle]
+  // );
+
   const cardStyle = useMemo(
     () => (smallStyle ? cardShownStyle : cardHiddenStyle),
     [smallStyle]
@@ -104,7 +112,6 @@ function Solution(props) {
     <ActionBox
       onClick={() => play()}
       Icon={PlayIcon}
-      smallStyle={smallStyle}
       buttonEnabled={!smallStyle && !hits && result[0] !== '-'}
       iconColor={red[700]}
     >

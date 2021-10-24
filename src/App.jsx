@@ -1,14 +1,13 @@
 import Container from '@mui/material/Container';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { useTheme } from '@mui/material/styles';
 
-import { LargeWizard } from './wizard';
-import { SmallWizard } from './wizard/SmallWizard';
+import { Wizard } from './wizard';
 
 function App() {
-  const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.up('sm'));
-  return <Container>{matches ? <LargeWizard /> : <SmallWizard />}</Container>;
+  return (
+    <Container>
+      <Wizard />
+    </Container>
+  );
 }
 
 export default App;

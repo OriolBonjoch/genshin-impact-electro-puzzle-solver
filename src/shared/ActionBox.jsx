@@ -3,7 +3,8 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 
 const containerStyle = {
-  minHeight: 'calc(100vh - 7rem)',
+  // marginBottom: '2rem',
+  // minHeight: 'calc(100vh - 7rem)',
   height: '100%',
   width: '100%',
   display: 'flex',
