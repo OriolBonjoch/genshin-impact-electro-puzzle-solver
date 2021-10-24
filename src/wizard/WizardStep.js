@@ -6,6 +6,7 @@ import NavigateNextOutlined from '@mui/icons-material/NavigateNextOutlined';
 import ActionBox from '../shared/ActionBox';
 
 const containerBox = {
+  minHeight: 'calc(100vh - 7rem)',
   height: '100%',
   width: '100%',
   display: 'flex',
@@ -16,10 +17,14 @@ const containerBox = {
 };
 
 export default function WizardStep(props) {
-  const { step, activeStep, stepComponent, moveTo, wizard } = props;
+  const { step, activeStep, stepComponent, moveTo, wizard, smallStyle } = props;
   const future = useMemo(() => activeStep < step, [activeStep, step]);
   const active = useMemo(() => activeStep === step, [activeStep, step]);
   const next = useMemo(() => activeStep + 1 === step, [activeStep, step]);
+
+  if (smallStyle && !active) {
+    return null;
+  }
 
   if (next) {
     return (
@@ -41,7 +46,7 @@ export default function WizardStep(props) {
       Icon={NavigateBeforeOutlinedIcon}
       buttonEnabled={!active}
     >
-      {stepComponent({ wizard, active })}
+      {stepComponent({ wizard, active, smallStyle })}
     </ActionBox>
   );
 }

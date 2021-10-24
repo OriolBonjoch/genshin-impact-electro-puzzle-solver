@@ -1,8 +1,6 @@
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import UnCheckedIcon from '@mui/icons-material/CheckBoxOutlineBlankOutlined';
-import CheckedIcon from '@mui/icons-material/CheckBoxOutlined';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -10,6 +8,7 @@ import PlayIcon from '@mui/icons-material/PlayArrowSharp';
 import useSolutionSolver from './solution.hook';
 import ActionBox from '../../shared/ActionBox';
 import { red } from '@mui/material/colors';
+import ElementImage from '../../shared/ElementImage';
 
 const cardHiddenStyle = {
   m: 2,
@@ -28,7 +27,7 @@ const cardShownStyle = {
   transition: 'padding 0.2s ease',
 };
 
-const cardContentStyleBase = {
+const cardContentStyle = {
   p: 0,
   display: 'flex',
   flexDirection: 'row',
@@ -39,6 +38,7 @@ const cardContentStyleBase = {
 
 const alignVertically = {
   p: 0,
+  width: '50%',
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
@@ -55,14 +55,6 @@ function Solution(props) {
   const { solve, calculateMove, calculateChecked } = useSolutionSolver(
     elements,
     statesCount
-  );
-
-  const cardContentStyle = useMemo(
-    () =>
-      smallStyle
-        ? { ...cardContentStyleBase, marginTop: '1.5rem' }
-        : cardContentStyleBase,
-    [smallStyle]
   );
 
   const cardStyle = useMemo(
@@ -118,19 +110,16 @@ function Solution(props) {
     >
       {result.map((elResult, id) => {
         const fontStyle = { fontWeight: 'bold' };
-        const checkIcon = elChecked[id] ? (
-          <CheckedIcon sx={{ fontSize: 32 }} />
-        ) : (
-          <UnCheckedIcon sx={{ fontSize: 32 }} />
-        );
         return (
           <Card key={id} sx={cardStyle} raised={smallStyle}>
             <CardContent sx={cardContentStyle}>
               <Box sx={alignVertically}>
-                <Typography variant="h2" sx={fontStyle}>
-                  {elState[id] + 1}
-                </Typography>
-                {checkIcon}
+                <ElementImage
+                  style={{ margin: '1rem' }}
+                  total={statesCount}
+                  highlighted={elChecked[id]}
+                  selected={elState[id]}
+                />
               </Box>
               <Box sx={alignVertically}>
                 <Typography variant="h2" sx={fontStyle}>
@@ -148,6 +137,7 @@ function Solution(props) {
           variant="contained"
           sx={{ m: 2 }}
           onClick={() => play()}
+          disabled={!!hits || !result || result[0] === '-'}
         >
           <PlayIcon sx={{ fontSize: 32 }} />
         </Button>

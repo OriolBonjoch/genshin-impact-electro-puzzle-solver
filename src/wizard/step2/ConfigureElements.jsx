@@ -1,10 +1,10 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
-import Slider from '@mui/material/Slider';
+import ElementImage from '../../shared/ElementImage';
 
 const cardStyle = {
   m: 2,
@@ -25,7 +25,6 @@ const disabledCardStyle = {
 function ConfigureElements(props) {
   const { wizard, active } = props;
   const { statesCount, elements, setElementState, toggleElementMoves } = wizard;
-  const [defaults] = useState(wizard.elements.map((el) => el.initialState));
 
   const buttons = useMemo(
     () => Array.from({ length: elements.length }, (_, i) => i),
@@ -47,20 +46,19 @@ function ConfigureElements(props) {
           >
             <CardContent>
               <Typography gutterBottom>Posición inicial</Typography>
-              <Slider
-                defaultValue={defaults[i]}
-                disabled={!active}
-                step={1}
-                marks
-                min={1}
-                max={statesCount}
-                aria-label="Posición inicial"
-                valueLabelDisplay="auto"
-                onChangeCommitted={(_, value) => setElementState(id, value - 1)}
+              <ElementImage
+                style={{
+                  width: '40%',
+                  margin: '0 25%',
+                  visibility: active ? 'visible' : 'hidden',
+                }}
+                total={statesCount}
+                selected={element.initialState}
+                onClick={() =>
+                  setElementState(id, (element.initialState + 1) % statesCount)
+                }
               />
-              <Typography sx={{ marginTop: 3 }} gutterBottom>
-                Piezas movidas
-              </Typography>
+              <Typography gutterBottom>Piezas movidas</Typography>
               <ButtonGroup size="large" color="primary">
                 {buttons.map((b) => {
                   const checked = moves.includes(b);

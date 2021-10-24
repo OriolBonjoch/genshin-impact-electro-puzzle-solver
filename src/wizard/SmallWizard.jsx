@@ -1,10 +1,13 @@
 import { useState } from 'react';
-import Stepper from '@mui/material/Stepper';
-import Step from '@mui/material/Step';
-import StepContent from '@mui/material/StepContent';
-import StepLabel from '@mui/material/StepLabel';
+import MobileStepper from '@mui/material/MobileStepper';
+import NavigateBeforeOutlinedIcon from '@mui/icons-material/NavigateBeforeOutlined';
+import NavigateNextOutlined from '@mui/icons-material/NavigateNextOutlined';
+import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
+import SwipeableViews from 'react-swipeable-views';
+
+import WizardStep from './WizardStep';
 import useWizard from './wizard.hook';
 import step1 from './step1';
 import step2 from './step2';
@@ -12,66 +15,57 @@ import step3 from './step3';
 
 const steps = [step1, step2, step3];
 
-function WizardButton(props) {
-  const { onClick, disabled, content, variant } = props;
-  return (
-    <Button
-      variant={variant || 'contained'}
-      disabled={disabled}
-      sx={{ width: '100%', m: 1 }}
-      onClick={onClick}
-    >
-      {content}
-    </Button>
-  );
-}
-
 export function SmallWizard() {
   const [activeStep, setActiveStep] = useState(0);
   const wizard = useWizard();
 
   return (
-    <Stepper
-      activeStep={activeStep}
-      orientation="vertical"
-      sx={{ width: '100%' }}
-    >
-      {steps.map((step, i) => {
-        const { label, Component } = step;
-        return (
-          <Step key={label}>
-            <StepLabel>{label}</StepLabel>
-            <StepContent sx={{ display: 'flex', flexDirection: 'column' }}>
-              <Box
-                sx={{
-                  width: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'space-around',
-                  position: 'relative',
-                }}
-              >
-                {Component({ wizard, active: true, smallStyle: true })}
-              </Box>
-              <Box
-                sx={{ width: '100%', display: 'flex', flexDirection: 'row' }}
-              >
-                <WizardButton
-                  variant="outlined"
-                  disabled={activeStep <= 0}
-                  onClick={() => setActiveStep((prev) => prev - 1)}
-                  content="Atrás"
-                />
-                <WizardButton
-                  disabled={activeStep >= steps.length - 1}
-                  onClick={() => setActiveStep(activeStep + 1)}
-                  content="Siguiente"
-                />
-              </Box>
-            </StepContent>
-          </Step>
-        );
-      })}
-    </Stepper>
+    <Box sx={{ width: '100%' }}>
+      <Typography variant="h4" sx={{ m: 2 }}>
+        {steps[activeStep].label}
+      </Typography>
+      <SwipeableViews
+        index={activeStep}
+        enableMouseEvents
+        onChangeIndex={(idx) => setActiveStep(idx)}
+      >
+        {steps.map((step, i) => (
+          <WizardStep
+            key={i}
+            smallStyle
+            step={i}
+            totalSteps={1}
+            activeStep={activeStep}
+            stepComponent={step.Component}
+            moveTo={(n) => setActiveStep(n)}
+            wizard={wizard}
+          />
+        ))}
+      </SwipeableViews>
+      <MobileStepper
+        variant="dots"
+        position="bottom"
+        steps={steps.length}
+        activeStep={activeStep}
+        backButton={
+          <Button
+            size="medium"
+            onClick={() => setActiveStep((prev) => prev - 1)}
+            disabled={activeStep <= 0}
+          >
+            <NavigateBeforeOutlinedIcon />
+          </Button>
+        }
+        nextButton={
+          <Button
+            size="medium"
+            onClick={() => setActiveStep((prev) => prev + 1)}
+            disabled={activeStep >= steps.length - 1}
+          >
+            <NavigateNextOutlined />
+          </Button>
+        }
+      />
+    </Box>
   );
 }

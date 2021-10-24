@@ -28,25 +28,23 @@ export function LargeWizard() {
           );
         })}
       </Stepper>
-      <>
-        <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-          {steps.map((step, i) => {
-            const { Component } = step;
-            return (
-              <Box key={i} sx={{ flex: `1 1 ${stepsWidth}%` }}>
-                <WizardStep
-                  step={i}
-                  totalSteps={steps.length}
-                  activeStep={activeStep}
-                  stepComponent={Component}
-                  moveTo={(n) => setActiveStep(n)}
-                  wizard={wizard}
-                />
-              </Box>
-            );
-          })}
-        </Box>
-      </>
+      <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+        {steps.map((step, i) => {
+          const { Component } = step;
+          return (
+            <Box key={i} sx={{ flex: `1 1 ${stepsWidth}%` }}>
+              <WizardStep
+                step={i}
+                totalSteps={steps.length}
+                activeStep={activeStep}
+                stepComponent={Component}
+                moveTo={(n) => setActiveStep(n)}
+                wizard={wizard}
+              />
+            </Box>
+          );
+        })}
+      </Box>
     </Box>
   );
 }
