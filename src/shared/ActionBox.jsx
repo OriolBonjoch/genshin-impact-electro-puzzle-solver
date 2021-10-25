@@ -2,14 +2,11 @@ import React, { useMemo } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 
-const containerStyle = {
-  // marginBottom: '2rem',
-  // minHeight: 'calc(100vh - 7rem)',
-  height: '100%',
+const containerStyleBase = {
   width: '100%',
   display: 'flex',
   flexDirection: 'column',
-  justifyContent: 'space-around',
+  justifyContent: 'flex-start',
   position: 'relative',
 };
 
@@ -28,13 +25,26 @@ const buttonStyle = {
 };
 
 export default function ActionBox(props) {
-  const { buttonEnabled, onClick, Icon, children, iconColor } = props;
+  const { buttonEnabled, onClick, Icon, children, iconColor, smallStyle } =
+    props;
   const iconStyle = useMemo(
     () => ({
       ...iconBaseStyle,
       ':hover': { color: iconColor ? `${iconColor}66` : '#1976d266' },
     }),
     [iconColor]
+  );
+
+  const containerStyle = useMemo(
+    () =>
+      smallStyle
+        ? {
+            ...containerStyleBase,
+            marginBottom: '3rem',
+            minHeight: 'calc(100vh - 7rem)',
+          }
+        : { ...containerStyleBase, height: '100%' },
+    [smallStyle]
   );
 
   return (

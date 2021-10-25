@@ -5,22 +5,7 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import ElementImage from '../../shared/ElementImage';
-
-const cardStyle = {
-  m: 2,
-  height: '100%',
-  width: 'calc(100% - 2rem)',
-};
-
-const disabledCardStyle = {
-  ...cardStyle,
-  paddingRight: '100%',
-  backgroundColor: '#FFFFFF',
-  backgroundImage: `
-    linear-gradient(70deg, transparent 72%, #6666FF 72%),
-    linear-gradient(110deg, transparent 72%, #6666FF 72%)`,
-  transition: 'padding 0.2s ease',
-};
+import styles from './ConfigureElements.styles';
 
 function ConfigureElements(props) {
   const { wizard, active } = props;
@@ -38,7 +23,7 @@ function ConfigureElements(props) {
         return (
           <Card
             key={id}
-            sx={active ? cardStyle : disabledCardStyle}
+            sx={active ? styles.card : styles.disabledCard}
             raised
             style={{
               transition: 'margin 0.2s ease, padding 0.2s ease',
@@ -48,8 +33,7 @@ function ConfigureElements(props) {
               <Typography gutterBottom>Posición inicial</Typography>
               <ElementImage
                 style={{
-                  width: '40%',
-                  margin: '0 25%',
+                  ...styles.image,
                   visibility: active ? 'visible' : 'hidden',
                 }}
                 total={statesCount}

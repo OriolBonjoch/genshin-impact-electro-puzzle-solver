@@ -1,80 +1,59 @@
-import { useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react';
+import useSolutionSolver from './solution-solver.hook';
 
-function* getMoves(elCount, stateCount, total, moves = null, j = 0) {
-  if (!moves) moves = Array.from({ length: elCount }, () => 0);
-  if (total === 0) {
-    yield moves;
-    return;
-  }
-
-  for (let i = j; i < elCount; i++) {
-    if (moves[i] === stateCount) continue;
-    yield* getMoves(
-      elCount,
-      stateCount,
-      total - 1,
-      moves.map((v, vi) => (i === vi ? v + 1 : v)),
-      i
-    );
-  }
-}
-
-export default function useSolutionSolver(elements, puzzleStatesCount) {
-  const validate = useCallback(
-    (initialState, moves) => {
-      let state = [...initialState];
-      for (let i = 0; i < moves.length; i++) {
-        state = elements[i].moves.reduce(
-          (acc, cur) =>
-            acc.map((c, j) =>
-              j === cur ? (c + moves[i]) % puzzleStatesCount : c
-            ),
-          state
-        );
-      }
-
-      return !state.some((el) => el !== state[0]);
-    },
-    [elements, puzzleStatesCount]
+export default function useSolution(elements, statesCount) {
+  const [elState, setElState] = useState(elements.map((el) => el.initialState));
+  const [elChecked, setElChecked] = useState(elements.map((_) => false));
+  const [hits, setHits] = useState(null);
+  const [result, setResult] = useState([]);
+  const { solve, calculateMove, calculateChecked } = useSolutionSolver(
+    elements,
+    statesCount
   );
 
-  const solve = useCallback(
-    (level = 0) => {
-      if (level >= elements.length * puzzleStatesCount) return null;
-      const initialState = elements.map((el) => el.initialState);
-      for (const moves of getMoves(elements.length, puzzleStatesCount, level)) {
-        if (validate(initialState, moves)) return moves;
-      }
+  const play = useCallback(() => {
+    setElState(elements.map((el) => el.initialState));
+    setHits([...result]);
+  }, [elements, result]);
 
-      return solve(level + 1);
-    },
-    [elements, puzzleStatesCount, validate]
-  );
-
-  const calculateMove = useCallback(
-    (prevState, moveIdx) =>
-      elements[moveIdx].moves.reduce(
-        (acc, cur) =>
-          acc.map((c, j) => (j === cur ? (c + 1) % puzzleStatesCount : c)),
-        prevState
-      ),
-    [elements, puzzleStatesCount]
-  );
-  const calculateChecked = useCallback((elState) => {
-    const repeats = {};
-    let maxRepeats = 0;
-    let maxValue = -1;
-    for (const i in elState) {
-      const cur = elState[i];
-      repeats[cur] = repeats[cur] ? repeats[cur] + 1 : 1;
-      if (maxRepeats < repeats[cur]) {
-        maxRepeats = repeats[cur];
-        maxValue = cur;
-      }
+  useEffect(() => {
+    if (!elState || elState.length === 0) {
+      return;
     }
 
-    return elState.map((el) => maxRepeats > 1 && el === maxValue);
-  }, []);
+    setElChecked(calculateChecked(elState));
+  }, [calculateChecked, elState]);
 
-  return { solve, calculateMove, calculateChecked };
+  useEffect(() => {
+    const solution = solve();
+    setResult(solution ?? elements.map((_) => '-'));
+  }, [elements, solve]);
+
+  useEffect(() => {
+    if (!hits) {
+      return;
+    }
+
+    setTimeout(() => {
+      const moveId = hits.findIndex((el) => el > 0);
+      if (moveId === -1) {
+        setTimeout(() => {
+          setHits(null);
+          setElState(elements.map((el) => el.initialState));
+        }, 5000);
+        return;
+      }
+
+      setElState((prev) => calculateMove(prev, moveId));
+      setHits((prev) => prev.map((hit, i) => (moveId === i ? hit - 1 : hit)));
+    }, 500);
+  }, [elements, calculateMove, hits]);
+
+  return {
+    elState,
+    elChecked,
+    hits,
+    result,
+    play,
+  };
 }

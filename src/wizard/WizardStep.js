@@ -6,13 +6,11 @@ import NavigateNextOutlined from '@mui/icons-material/NavigateNextOutlined';
 import ActionBox from '../shared/ActionBox';
 
 const containerBox = {
-  // marginBottom: '2rem',
-  // minHeight: 'calc(100vh - 7rem)',
   height: '100%',
   width: '100%',
   display: 'flex',
   flexDirection: 'column',
-  justifyContent: 'space-around',
+  justifyContent: 'flex-start',
   position: 'relative',
   pt: 3,
 };
@@ -43,6 +41,7 @@ function WizardStepContent(props) {
 
   return (
     <ActionBox
+      smallStyle={smallStyle}
       onClick={() => moveTo(step)}
       Icon={NavigateBeforeOutlinedIcon}
       buttonEnabled={!active}
@@ -53,11 +52,11 @@ function WizardStepContent(props) {
 }
 
 export default function WizardStep(props) {
-  const { key, smallStyle, stepsWidth } = props;
+  const { smallStyle, stepsWidth } = props;
   return smallStyle ? (
-    <WizardStepContent key={key} {...props} />
+    <WizardStepContent {...props} />
   ) : (
-    <Box key={key} sx={{ flex: `1 1 ${stepsWidth}%` }}>
+    <Box sx={{ flex: `1 1 ${stepsWidth}%` }}>
       <WizardStepContent {...props} />
     </Box>
   );

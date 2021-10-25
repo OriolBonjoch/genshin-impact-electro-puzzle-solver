@@ -1,24 +1,17 @@
 import React, { useMemo } from 'react';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
+import styles from './NewPuzzle.styles';
 
 function NewPuzzle(props) {
   const { active, wizard } = props;
   const { statesCount, elements, setStatesCount, setElementsCount } = wizard;
-
-  // const [statesCount, setStatesCount] = useState(4);
   const elementsCount = useMemo(() => elements.length, [elements.length]);
+
   return (
-    <Box
-      sx={{
-        flex: '1 1 auto',
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-      }}
-    >
+    <Box sx={styles.container}>
       <TextField
-        sx={{ m: 2 }}
+        sx={styles.control}
         type="number"
         value={statesCount}
         disabled={!active}
@@ -32,7 +25,7 @@ function NewPuzzle(props) {
         }}
       />
       <TextField
-        sx={{ m: 2 }}
+        sx={styles.control}
         type="number"
         value={elementsCount}
         disabled={!active}
