@@ -1,10 +1,14 @@
+import { useContext } from 'react';
 import MobileStepper from '@mui/material/MobileStepper';
 import NavigateBeforeOutlinedIcon from '@mui/icons-material/NavigateBeforeOutlined';
 import NavigateNextOutlined from '@mui/icons-material/NavigateNextOutlined';
 import Button from '@mui/material/Button';
+import ThemeContext from '../shared/ThemeContext';
 
 export default function WizardFooter(props) {
-  const { smallStyle, activeStep, setActiveStep, totalSteps } = props;
+  const { activeStep, setActiveStep, totalSteps } = props;
+  const smallStyle = useContext(ThemeContext);
+
   if (!smallStyle) {
     return null;
   }

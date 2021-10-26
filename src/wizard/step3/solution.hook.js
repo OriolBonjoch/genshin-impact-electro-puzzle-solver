@@ -34,10 +34,10 @@ export default function useSolution(elements, statesCount) {
       return;
     }
 
-    setTimeout(() => {
+    let cancelationTimeout = setTimeout(() => {
       const moveId = hits.findIndex((el) => el > 0);
       if (moveId === -1) {
-        setTimeout(() => {
+        cancelationTimeout = setTimeout(() => {
           setHits(null);
           setElState(elements.map((el) => el.initialState));
         }, 5000);
@@ -47,6 +47,8 @@ export default function useSolution(elements, statesCount) {
       setElState((prev) => calculateMove(prev, moveId));
       setHits((prev) => prev.map((hit, i) => (moveId === i ? hit - 1 : hit)));
     }, 500);
+
+    return () => clearTimeout(cancelationTimeout);
   }, [elements, calculateMove, hits]);
 
   return {

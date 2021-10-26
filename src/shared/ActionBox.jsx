@@ -1,35 +1,15 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useContext } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-
-const containerStyleBase = {
-  width: '100%',
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'flex-start',
-  position: 'relative',
-};
-
-const iconBaseStyle = {
-  height: '100%',
-  width: '100%',
-  position: 'absolute',
-  bottom: '0',
-};
-
-const buttonStyle = {
-  height: '100%',
-  width: '100%',
-  position: 'absolute',
-  color: 'transparent',
-};
+import ThemeContext from './ThemeContext';
+import styles from './ActionBox.styles';
 
 export default function ActionBox(props) {
-  const { buttonEnabled, onClick, Icon, children, iconColor, smallStyle } =
-    props;
+  const { buttonEnabled, onClick, Icon, children, iconColor } = props;
+  const smallStyle = useContext(ThemeContext);
   const iconStyle = useMemo(
     () => ({
-      ...iconBaseStyle,
+      ...styles.iconBase,
       ':hover': { color: iconColor ? `${iconColor}66` : '#1976d266' },
     }),
     [iconColor]
@@ -39,11 +19,11 @@ export default function ActionBox(props) {
     () =>
       smallStyle
         ? {
-            ...containerStyleBase,
+            ...styles.containerBase,
             marginBottom: '3rem',
             minHeight: 'calc(100vh - 7rem)',
           }
-        : { ...containerStyleBase, height: '100%' },
+        : { ...styles.containerBase, height: '100%' },
     [smallStyle]
   );
 
@@ -51,7 +31,7 @@ export default function ActionBox(props) {
     <Box sx={containerStyle}>
       {children}
       {buttonEnabled && (
-        <Button variant="text" sx={buttonStyle} onClick={onClick}>
+        <Button variant="text" sx={styles.button} onClick={onClick}>
           <Icon sx={iconStyle} />
         </Button>
       )}

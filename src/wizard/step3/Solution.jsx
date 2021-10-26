@@ -1,19 +1,22 @@
-import React, { useMemo } from 'react';
+import React, { useContext, useMemo } from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import PlayIcon from '@mui/icons-material/PlayArrowSharp';
+import { red } from '@mui/material/colors';
+
 import useSolution from './solution.hook';
 import ActionBox from '../../shared/ActionBox';
-import { red } from '@mui/material/colors';
 import ElementImage from '../../shared/ElementImage';
 import styles from './Solution.styles';
+import ThemeContext from '../../shared/ThemeContext';
 
 function Solution(props) {
-  const { wizard, smallStyle } = props;
+  const { wizard } = props;
   const { elements, statesCount } = wizard;
+  const smallStyle = useContext(ThemeContext);
   const { elState, elChecked, hits, result, play } = useSolution(
     elements,
     statesCount
